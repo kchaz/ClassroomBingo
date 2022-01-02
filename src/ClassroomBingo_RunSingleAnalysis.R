@@ -50,8 +50,8 @@ ClassroomBingoAnalysis <- function(noutcomes, probs,  outcome_labels, card_size,
            frame.plot = F
   )
   
-  #get matrix of probabilities for 5-35 rolls
-  nrollsvec <-  5:35
+  #get matrix of probabilities for minimum # possible to win to min + 30 rolls
+  nrollsvec <-  card_size:(card_size + 30)
   cum_mat = get_pwin_matrix(cards = cards,
                             probs = probs,
                             nrollsvec = nrollsvec)
