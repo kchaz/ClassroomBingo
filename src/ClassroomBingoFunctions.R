@@ -67,7 +67,7 @@ pwin <- function(cards, probs, nrolls){
   #if too few rolls to win, return vector of zeros
   if (nrolls < card_size){return(numeric(ncards))}
   
-  #generate all possible rolls for the outcomes - rolls represented with counts for each outcome (no order).
+  #generate all possible rolls, represented with counts for each outcome (no order).
   rolls <- xsimplex(p = noutcomes, n = nrolls)
   
   #to get probabilities of each outcome count vector, need to take into account multiple possible 
