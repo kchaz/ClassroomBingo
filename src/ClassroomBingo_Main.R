@@ -13,7 +13,7 @@ outcome_labels = 2:6
 #original problem probabilities
 probs <- c(1,4,10,12,9)/36  #original problem, these are for dice sums 2,3,4,5,6
 
-ClassroomBingoAnalysis(noutcomes = noutcomes,
+cum_mat <- ClassroomBingoAnalysis(noutcomes = noutcomes,
                                    probs = probs,
                                    outcome_labels = outcome_labels,
                                    card_size = card_size,
@@ -24,7 +24,7 @@ ClassroomBingoAnalysis(noutcomes = noutcomes,
 #maintains same order (5 is highest probability outcome) as original case
 #for eaiser comparisons
 probs <-  c(1,4,6,20,5)/36  
-ClassroomBingoAnalysis(noutcomes = noutcomes,
+cum_mat <- ClassroomBingoAnalysis(noutcomes = noutcomes,
                        probs = probs,
                        outcome_labels = outcome_labels,
                        card_size = card_size,
@@ -35,7 +35,7 @@ ClassroomBingoAnalysis(noutcomes = noutcomes,
 
 #all same 
 probs <-  rep(7.2,5)/36     # means those in same multinomial equivalence class have same probs
-ClassroomBingoAnalysis(noutcomes = noutcomes,
+cum_mat <- ClassroomBingoAnalysis(noutcomes = noutcomes,
                        probs = probs,
                        outcome_labels = outcome_labels,
                        card_size = card_size,
@@ -45,7 +45,7 @@ ClassroomBingoAnalysis(noutcomes = noutcomes,
   
 #very extreme casse
 probs <-  c(1,1,1,32,1)/36  #extreme case
-ClassroomBingoAnalysis(noutcomes = noutcomes,
+cum_mat <- ClassroomBingoAnalysis(noutcomes = noutcomes,
                        probs = probs,
                        outcome_labels = outcome_labels,
                        card_size = card_size,
@@ -55,7 +55,7 @@ ClassroomBingoAnalysis(noutcomes = noutcomes,
 
 #sanity check - should get 0's and 1's
 probs <-  c(0,0,0,36,0)/36
-ClassroomBingoAnalysis(noutcomes = noutcomes,
+cum_mat <- ClassroomBingoAnalysis(noutcomes = noutcomes,
                        probs = probs,
                        outcome_labels = outcome_labels,
                        card_size = card_size,

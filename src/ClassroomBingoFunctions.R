@@ -128,10 +128,6 @@ get_pwin_matrix <- function(cards, probs, nrollsvec){
 #' their entries (note that we really care about orderings of rolls but for card_size rolls,
 #' this is equivalent to # of orderings of numbers on card)
 
-get_equivalence_class_mat(cards)
-
-
-
 
 plot_card_prob_trajectories <- function(nrollsvec, 
                                         mat,

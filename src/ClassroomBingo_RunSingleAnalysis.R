@@ -93,6 +93,6 @@ ClassroomBingoAnalysis <- function(noutcomes, probs,  outcome_labels, card_size,
                               color_by_equiv_mat = T,
                               equiv_mat = equiv_mat)
   
-  
+  return(cum_mat)
 }
 
