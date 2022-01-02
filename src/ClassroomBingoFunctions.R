@@ -2,14 +2,6 @@ library(combinat)
 
 
 
-#TODO: address any todo messages below
-#TODO: cut down on documentation a bit
-
-
-
-
-
-
 
 get_all_bingo_cards <- function(noutcomes, card_size){
   #' noutcomes: number of possible outcomes from rolling the dice
@@ -156,7 +148,7 @@ plot_card_prob_trajectories <- function(nrollsvec,
   
   
   #setup 
-  colors = c("blue","orange","green","purple","pink","cyan","black","red")
+  colors = c("blue","orange","cyan","purple","red","green","pink","black")
 
   
   if (cumulative){
@@ -188,11 +180,12 @@ plot_card_prob_trajectories <- function(nrollsvec,
     labels = rownames(equiv_mat)
     num_classes = length(labels)
     colors = rep(colors, length.out = num_classes)
-    per_card_colors = apply(equiv_mat, 2, function(c){colors[c]})
-    
+    per_card_colors = apply(equiv_mat, 
+                            MARGIN = 2, 
+                            FUN =  function(c){colors[c]})
     #plot cards
     for (i in seq_len(ncol(mat))){
-      lines(nrollsvec, mat[,i], col = oer_card_colors[i],
+      lines(nrollsvec, mat[,i], col = per_card_colors[i],
             lty = 1,
             lwd = 1)
     }
@@ -200,7 +193,7 @@ plot_card_prob_trajectories <- function(nrollsvec,
     legend(x = legend_loc,
            legend = labels,
            col = colors,
-           lty = 2,
+           lty = 1,
            lwd = 2,
            cex = 1.1,
            title = "Multinomial equivalence classes"

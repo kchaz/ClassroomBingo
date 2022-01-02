@@ -81,7 +81,17 @@ ClassroomBingoAnalysis <- function(noutcomes, probs,  outcome_labels, card_size,
   
 
   
-  # TO DO: implement equivalence class functionality 
+  #plot cumulative probability graph with equivalence coloring
+  equiv_mat = get_equivalence_class_mat(cards)
+  plot_card_prob_trajectories(nrollsvec = nrollsvec,
+                              mat = cum_mat,
+                              cumulative = T,
+                              initial_best_inds = initial_best_inds,
+                              initial_best_cards = initial_best_cards,
+                              legend_loc ="topleft",
+                              outcome_labels = outcome_labels,
+                              color_by_equiv_mat = T,
+                              equiv_mat = equiv_mat)
   
   
 }
