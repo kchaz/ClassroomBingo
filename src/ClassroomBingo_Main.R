@@ -33,7 +33,7 @@ ClassroomBingoAnalysis(noutcomes = noutcomes,
 
 
 
-#all same
+#all same 
 probs <-  rep(7.2,5)/36     # means those in same multinomial equivalence class have same probs
 ClassroomBingoAnalysis(noutcomes = noutcomes,
                        probs = probs,
