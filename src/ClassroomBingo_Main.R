@@ -66,3 +66,14 @@ cum_mat <- ClassroomBingoAnalysis(noutcomes = noutcomes,
                        epsilon = 1e-8,
                        save_plots = F)
 
+
+
+#test a case with 7 outcomes and bingo cards of size 4
+probs <-  c(1,2,3,7,9,16,11)/49
+cum_mat <- ClassroomBingoAnalysis(noutcomes = 7,
+                                  probs = probs,
+                                  outcome_labels = 1:7,
+                                  card_size = 4,
+                                  epsilon = 1e-8,
+                                  save_plots = F)
+

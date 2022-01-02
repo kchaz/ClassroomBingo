@@ -22,7 +22,8 @@ ClassroomBingoAnalysis <- function(noutcomes, probs,  outcome_labels, card_size,
   #' save_plots: TO DO
   
   #get all possible bingo cards for given card size and number of outcomes
-  cards = get_all_bingo_cards(noutcomes = 5, card_size = 5)
+  cards = get_all_bingo_cards(noutcomes = noutcomes,
+                              card_size = card_size)
 
 
   #Identify best board(s) for card_size rolls (the minimum possible # of rolls to win)
