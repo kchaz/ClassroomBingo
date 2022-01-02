@@ -19,6 +19,8 @@ cum_mat <- ClassroomBingoAnalysis(noutcomes = noutcomes,
                                    card_size = card_size,
                                    epsilon = 1e-8,
                                    save_plots = F)
+#see which is biggest at each roll
+apply(cum_mat, 1, which.max)
 
 #case with tie and switching dynamic where # of rolls matters
 #maintains same order (5 is highest probability outcome) as original case
@@ -30,6 +32,8 @@ cum_mat <- ClassroomBingoAnalysis(noutcomes = noutcomes,
                        card_size = card_size,
                        epsilon = 1e-8,
                        save_plots = F)
+#see which is biggest at each roll
+apply(cum_mat, 1, which.max)
 
 
 
