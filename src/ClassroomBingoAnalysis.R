@@ -96,11 +96,11 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
            xlab = sprintf("Probability of winning in %s rolls", cardsize),
            main = sprintf(paste("Probabilities of winning in %s rolls for",
              "all possible cards"), cardsize),
-           pt.cex = 1.3, 
-           cex.main = 1.5,
+           pt.cex = 1.0, 
+           cex.main = 1.2,
            cex.lab = 1.1,
            cex = 1.1,
-           frame.plot = FALSE
+           frame.plot = TRUE
   )
   if (save_plots) dev.off()
   
@@ -127,7 +127,7 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
   ###
   # Plot probability graph
   ###
-  if (FALSE) {
+  if (TRUE) {
     cum_to_prob <- function(v) {
       n <- length(v)
       return(c(v[1], v[2:n] - v[seq_len(n-1)]))
@@ -135,7 +135,7 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
     prob_mat <- apply(cum_mat, MARGIN = 2, cum_to_prob)
   }
   # TODO: TEST THIS NEXT LINE:
-  prob_mat <- rbind(cum_mat[1, ], diff(cum_mat[-1, ])
+  # prob_mat <- rbind(cum_mat[1, ], diff(cum_mat[-1, ]))
   if (save_plots) pdf(pnames[3], ...)
   plot_card_prob_trajectories(nrollsvec = nrollsvec,
                               mat = prob_mat,
