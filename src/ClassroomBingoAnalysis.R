@@ -1,14 +1,9 @@
 
 # source('ClassroomBingoFunctions.R')
 
-
-# TODO: add ability to specify that it should save the resulting plots 
-# with some kind of handling of file names so that don't overwrite when run
-# this function multiple times for different set-ups
-
-
 ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
-  nrollsvec = cardsize:(cardsize + 30), epsilon = 1e-8, save_plots = FALSE) {
+  nrollsvec = cardsize:(cardsize + 30), epsilon = 1e-8, save_plots = FALSE,
+  caseLabel = "", plotDir = ".", ...) {
   #' DESCRIPTION
   #'       For a specified problem configuration, computes win probabilities
   #' for all possible bingo cards. Generates 4 plots:
@@ -38,9 +33,15 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
   #'   ties for maximum-probability card. Default is 1e-8.
   #' save_plots: logical flag. If TRUE (the default), each plot is saved to a
   #'   file.
+  #' caseLabel  character string, used as part of plot filenames. Default is "".
+  #'   Ignored if save_plots is FALSE.
+  #' plotDir  character string giving the path to a directory where you want
+  #'   to save plot files. The default is ".", i.e., the current working
+  #'   directory. Ignored if save_plots is FALSE.
+  #' ...  optional arguments to function pdf; ignored if save_plots is FALSE.
   #'
   #' VALUE
-  #' list with two components:
+  #' list with components:
   #' cards:  numeric matrix giving all possible bingo cards. See function
   #'   get_all_bingo_cards for details.
   #' cumprob_mat:  numeric matrix with length(nrollsvec) rows and ncol(cards)
@@ -48,7 +49,23 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
   #'   a card. The (i,j)th element gives the probability that the jth card
   #'   will win in nrollsvec[i] rolls or fewer. See function get_pwin_matrix
   #'   for details. 
+  #' noutcomes:       value of argument noutcomes
+  #' probs:           value of argument probs
+  #' outcome_labels:  value of argument outcome_labels
+  #' cardsize:        value of argument cardsize
+  #' nrollsvec:       value of argument nrollvec
+  #' epsilon:         value of argument epsilon
+  #' save_plots:      value of argument save_plots
+  #' caseLabel:       value of argument caseLabel
+  #' plotDir:         value of argument plotDir
+  #' call:            image of the current call to this function. 
   #' 
+  ###
+  # Construct filenames for plots
+  ###
+    pnames <- paste0("Case", caseLabel, "-Plot0", 1:4, ".pdf") 
+    pnames <- file.path( plotDir, pnames )
+
   ###
   # Get all possible bingo cards for given card size and number of outcomes
   ###
@@ -71,6 +88,7 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
   ###
   # Dotchart of win probabilities, just for minimum number of rolls to win
   ###
+  if (save_plots) pdf(pnames[1], ...)
   dotchart(initial_probs, 
            pch = 21, 
            bg = "lightblue",
@@ -84,6 +102,7 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
            cex = 1.1,
            frame.plot = FALSE
   )
+  if (save_plots) dev.off()
   
   ###
   # Get matrix of probabilities for all values in nrollsvec.
@@ -95,6 +114,7 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
   ###
   # Plot cumulative probability graph
   ###
+  if (save_plots) pdf(pnames[2], ...)
   plot_card_prob_trajectories(nrollsvec = nrollsvec,
                               mat = cum_mat,
                               cumulative = TRUE,
@@ -102,6 +122,7 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
                               initial_best_cards = initial_best_cards,
                               legend_loc ="topleft",
                               outcome_labels = outcome_labels)
+  if (save_plots) dev.off()
   
   ###
   # Plot probability graph
@@ -115,6 +136,7 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
   }
   # TODO: TEST THIS NEXT LINE:
   prob_mat <- rbind(cum_mat[1, ], diff(cum_mat[-1, ])
+  if (save_plots) pdf(pnames[3], ...)
   plot_card_prob_trajectories(nrollsvec = nrollsvec,
                               mat = prob_mat,
                               cumulative = FALSE,
@@ -122,11 +144,13 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
                               initial_best_cards = initial_best_cards,
                               legend_loc = "topright",
                               outcome_labels = outcome_labels)
+  if (save_plots) dev.off()
   
   ###
   # Plot cumulative probability graph with equivalence coloring
   ###
   equiv_mat <- get_equivalence_class_mat(cards)
+  if (save_plots) pdf(pnames[4], ...)
   plot_card_prob_trajectories(nrollsvec = nrollsvec,
                               mat = cum_mat,
                               cumulative = TRUE,
@@ -136,6 +160,7 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
                               outcome_labels = outcome_labels,
                               color_by_equiv_mat = TRUE,
                               equiv_mat = equiv_mat)
+  if (save_plots) dev.off()
 
   ###
   # Return list of some useful stuff, but do it quietly.
@@ -149,6 +174,8 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
 	      nrollsvec = nrollsvec,
 	      epsilon = epsilon,
 	      save_plots = save_plots,
+	      caseLabel = caseLabel,
+	      plotDir = plotDir,
 	      call = match.call())
   return(invisible(out))
 }
