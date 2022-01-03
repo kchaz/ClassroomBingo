@@ -8,12 +8,23 @@ source('ClassroomBingoFunctions.R')
 
 
 ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
-  epsilon = 1e-8, save_plots = FALSE) {
+  nrollsvec = cardsize:(cardsize + 30), epsilon = 1e-8, save_plots = FALSE) {
   #' DESCRIPTION
-  #'
+  #'       For a specified problem configuration, computes win probabilities
+  #' for all possible bingo cards. Generates 4 plots:
+  #' 1. Dotplot of card index versus win probability for number of rolls equal
+  #' to the number of spaces on bingo card (i.e., cardsize).
+  #' 2. Line plot of cumulative win probability versus number of rolls, with
+  #' one line for each possible card.
+  #' 3. Line plot of pointwise win probability versus number of rolls, with
+  #' one line for each possible card.
+  #' 4. Line plot of cumulative win probability versus number of rolls, with
+  #' one line for each possible card, and lines colored by card equivalence
+  #' class as defined by function get_equivalence_class_mat.
   #'
   #' ARGUMENTS
-  #' noutcomes:  number of possible outcomes from rolling the dice
+  #' noutcomes:  numeric vector of length 1, giving number of possible
+  #'   outcomes from rolling the dice
   #' probs:  numeric vector giving probabilities for the possible outcomes.
   #'   Must have length noutcomes. Elements must sum to 1.
   #' outcome_labels:  character vector giving names for the outcomes (e.g.,
@@ -21,87 +32,114 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
   #'   labeling plots.
   #' cardsize:  numeric vector of length 1, giving number of spaces on bingo
   #'   card to be filled by selecting some outcomes
+  #' nrollsvec:  numeric vector, giving numbers of rolls, i.e., numbers
+  #'   of outcomes to generate. Default is cardsize:(cardsize + 30).
   #' epsilon: numeric vector of length 1; determines tolerance for detecting
   #'   ties for maximum-probability card. Default is 1e-8.
   #' save_plots: logical flag. If TRUE (the default), each plot is saved to a
-  #' file.
+  #'   file.
   #'
   #' VALUE
-  #'
+  #' list with two components:
+  #' cards:  numeric matrix giving all possible bingo cards. See function
+  #'   get_all_bingo_cards for details.
+  #' cumprob_mat:  numeric matrix with length(nrollsvec) rows and ncol(cards)
+  #'   columns. Each row corresponds to a number of rolls, and each column to
+  #'   a card. The (i,j)th element gives the probability that the jth card
+  #'   will win in nrollsvec[i] rolls or fewer. See function get_pwin_matrix
+  #'   for details. 
+  #' 
   ###
   # Get all possible bingo cards for given card size and number of outcomes
   ###
   cards <- get_all_bingo_cards(noutcomes = noutcomes, cardsize = cardsize)
 
-
-  #Identify best board(s) for cardsize rolls (the minimum possible # of rolls to win)
-  initial_probs = pwin(cards = cards, probs = probs, nrolls = cardsize)
-  initial_best_prob = max(initial_probs)
+  ###
+  # Identify best card(s) for cardsize rolls (the minimum possible # of rolls
+  # to win)
+  ###
+  initial_probs <- pwin(cards = cards, probs = probs, nrolls = cardsize)
+  initial_best_prob <- max(initial_probs)
   
-  
-  #get inidices of card with probability within episilon of max probability 
-  #(account for possible rounding error). Also get corresponding cards.
+  ###
+  # Get indices of card(s) with probability within episilon of max probability 
+  # (account for possible rounding error). Also get corresponding cards.
+  ###
   initial_best_inds <- which(initial_probs >= initial_best_prob - epsilon)
-  initial_best_cards <- cards[,initial_best_inds]
+  initial_best_cards <- cards[, initial_best_inds]
   
-  #chart just for minimum rolls to win
+  ###
+  # Dotchart of win probabilities, just for minimum number of rolls to win
+  ###
   dotchart(initial_probs, 
            pch = 21, 
            bg = "lightblue",
-           ylab = "Board Index", 
+           ylab = "Card Index", 
            xlab = sprintf("Probability of winning in %s rolls", cardsize),
-           main = sprintf("Probabilities of winning in %s rolls for all possible boards", cardsize),
+           main = sprintf(paste("Probabilities of winning in %s rolls for",
+             "all possible cards"), cardsize),
            pt.cex = 1.3, 
            cex.main = 1.5,
            cex.lab = 1.1,
            cex = 1.1,
-           frame.plot = F
+           frame.plot = FALSE
   )
   
-  # Get matrix of probabilities for minimum # possible to win to min + 30 rolls
-  nrollsvec <-  cardsize:(cardsize + 30)
-  cum_mat = get_pwin_matrix(cards = cards,
+  ###
+  # Get matrix of probabilities for all values in nrollsvec.
+  ###
+  cum_mat <- get_pwin_matrix(cards = cards,
                             probs = probs,
                             nrollsvec = nrollsvec)
   
-  
-  #plot cumulative probability graph
+  ###
+  # Plot cumulative probability graph
+  ###
   plot_card_prob_trajectories(nrollsvec = nrollsvec,
                               mat = cum_mat,
-                              cumulative = T,
+                              cumulative = TRUE,
                               initial_best_inds = initial_best_inds,
                               initial_best_cards = initial_best_cards,
                               legend_loc ="topleft",
                               outcome_labels = outcome_labels)
   
-  #plot probability graph
-  cum_to_prob <- function(v){
-    n = length(v)
-    return(c(v[1], v[2:n] - v[seq_len(n-1)]))
+  ###
+  # Plot probability graph
+  ###
+  if (FALSE) {
+    cum_to_prob <- function(v) {
+      n <- length(v)
+      return(c(v[1], v[2:n] - v[seq_len(n-1)]))
+    }
+    prob_mat <- apply(cum_mat, MARGIN = 2, cum_to_prob)
   }
-  prob_mat = apply(cum_mat, MARGIN = 2, cum_to_prob)
+  # TODO: TEST THIS NEXT LINE:
+  prob_mat <- rbind(cum_mat[1, ], diff(cum_mat[-1, ])
   plot_card_prob_trajectories(nrollsvec = nrollsvec,
                               mat = prob_mat,
-                              cumulative = F,
+                              cumulative = FALSE,
                               initial_best_inds = initial_best_inds,
                               initial_best_cards = initial_best_cards,
                               legend_loc = "topright",
                               outcome_labels = outcome_labels)
   
-
-  
-  #plot cumulative probability graph with equivalence coloring
-  equiv_mat = get_equivalence_class_mat(cards)
+  ###
+  # Plot cumulative probability graph with equivalence coloring
+  ###
+  equiv_mat <- get_equivalence_class_mat(cards)
   plot_card_prob_trajectories(nrollsvec = nrollsvec,
                               mat = cum_mat,
-                              cumulative = T,
+                              cumulative = TRUE,
                               initial_best_inds = initial_best_inds,
                               initial_best_cards = initial_best_cards,
                               legend_loc ="topleft",
                               outcome_labels = outcome_labels,
-                              color_by_equiv_mat = T,
+                              color_by_equiv_mat = TRUE,
                               equiv_mat = equiv_mat)
-  
-  
+
+  ###
+  # Return list of some useful stuff, but do it quietly.
+  ###
+  return(invisible(list(cards = cards, cumprob_mat = cum_mat)))
 }
 
