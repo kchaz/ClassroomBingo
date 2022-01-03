@@ -70,8 +70,10 @@ get_equivalence_class_mat <- function(cards) {
   # Create C x ncols(cards) logical matrix with TRUEs encoding which class
   # each card belongs to.
   ###
-  equiv_mat <- t(unlist(lapply(classes, FUN = function(c){c == strings},
-    USE.NAMES = TRUE)))
+  equiv_mat <- t(sapply(classes, FUN = function(c){c == strings},
+    USE.NAMES = TRUE))
+  # equiv_mat <- t(unlist(lapply(classes, FUN = function(c) {c == strings} ),
+  #   use.names = TRUE))
   return(equiv_mat)
 }
 
@@ -119,7 +121,6 @@ pwin <- function(cards, probs, nrolls) {
       "(i.e., length of probs)"))
   }
   cardsize <- unique(colSums(cards))
-  # NOTE BUG FIX HERE: WAS 2 instead of 1:
   if (length(cardsize) > 1) {
     stop(paste("All bingo cards must have same size (i.e., column sums of",
       "cards matrix must all be the same)"))
@@ -194,9 +195,6 @@ get_pwin_matrix <- function(cards, probs, nrollsvec) {
 }
 
 
-
-# get_equivalence_class_mat(cards)
-
 plot_card_prob_trajectories <- function(nrollsvec, 
                                         mat,
                                         cumulative, 
@@ -240,8 +238,8 @@ plot_card_prob_trajectories <- function(nrollsvec,
   colors <- c("blue", "orange", "cyan", "purple", "red", "green", "pink",
     "black")
   if (cumulative) {
-    main <- paste("Cumulative probability of winning for each card as",
-      "number of rolls increases")
+    main <- paste("Cumulative probability of winning for each card\n",
+      "as number of rolls increases")
     ylab <- "Probability of winning in n rolls or fewer"
   } else {
     main <- "Probability of winning in exactly n rolls for each card"
@@ -255,10 +253,10 @@ plot_card_prob_trajectories <- function(nrollsvec,
        mat[, 1],
        type = "n",
        main = main,
-       ylim = c(0, max(mat) * 1.05),
+       ylim = c(0, max(mat) * 1.15),
        xlab = "Number of rolls (n)",
        ylab = ylab,
-       cex.main = 1.5,
+       cex.main = 1.2,
        cex.lab = 1.1
   )
   
@@ -286,6 +284,7 @@ plot_card_prob_trajectories <- function(nrollsvec,
            lty = 1,
            lwd = 2,
            cex = 1.1,
+	   bty = "n",
            title = "Multinomial equivalence classes"
     )
   } else {
@@ -316,7 +315,7 @@ plot_card_prob_trajectories <- function(nrollsvec,
     if (is.vector(initial_best_cards)) { # no ties case
       outcome_inds <- x2u(initial_best_cards)
       outcome_rep <- outcome_labels[outcome_inds]
-      legend <- paste(outcome_rep, collapse = ",")
+      legend. <- paste(outcome_rep, collapse = ",")
     } else {
       outcome_inds <- apply(initial_best_cards, # convert representation
                             MARGIN = 2,
@@ -324,17 +323,18 @@ plot_card_prob_trajectories <- function(nrollsvec,
       outcome_rep <- apply(outcome_inds,
                           MARGIN = 2,
                           function(i) { outcome_labels[i] })
-      legend <- apply(outcome_rep, 
+      legend. <- apply(outcome_rep, 
                      MARGIN = 2,
                      paste,
                      collapse = ",")
     }
     legend(x = legend_loc,
-           legend = legend,
+           legend = legend.,
            col = colors[seq_len(nties)],
            lty = 2,
            lwd = 2,
            cex = 1.1,
+	   bty = "n",
            title = sprintf("Highest Probability Card at n = %d", min(nrollsvec))
     )
   }
