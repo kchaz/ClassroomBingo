@@ -140,6 +140,16 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
   ###
   # Return list of some useful stuff, but do it quietly.
   ###
-  return(invisible(list(cards = cards, cumprob_mat = cum_mat)))
+  out <- list(cards = cards,
+	      cumprob_mat = cum_mat,
+	      noutcomes = noutcomes,
+	      probs = probs,
+	      outcome_labels = outcome_labels,
+	      cardsize = cardsize,
+	      nrollsvec = nrollsvec,
+	      epsilon = epsilon,
+	      save_plots = save_plots,
+	      call = match.call())
+  return(invisible(out))
 }
 
