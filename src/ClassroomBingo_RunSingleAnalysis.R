@@ -2,32 +2,40 @@
 source('ClassroomBingoFunctions.R')
 
 
-#TO DO: add ability to specify that it should save the resulting plots 
-#with some kind of handling of file names so that don't override when run this function
-#multiple times for different set-ups
+# TODO: add ability to specify that it should save the resulting plots 
+# with some kind of handling of file names so that don't overwrite when run
+# this function multiple times for different set-ups
 
 
+ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
+  epsilon = 1e-8, save_plots = FALSE) {
+  #' DESCRIPTION
+  #'
+  #'
+  #' ARGUMENTS
+  #' noutcomes:  number of possible outcomes from rolling the dice
+  #' probs:  numeric vector giving probabilities for the possible outcomes.
+  #'   Must have length noutcomes. Elements must sum to 1.
+  #' outcome_labels:  character vector giving names for the outcomes (e.g.,
+  #'   2:6 are possible dice sums for original problem). These are used for
+  #'   labeling plots.
+  #' cardsize:  numeric vector of length 1, giving number of spaces on bingo
+  #'   card to be filled by selecting some outcomes
+  #' epsilon: numeric vector of length 1; determines tolerance for detecting
+  #'   ties for maximum-probability card. Default is 1e-8.
+  #' save_plots: logical flag. If TRUE (the default), each plot is saved to a
+  #' file.
+  #'
+  #' VALUE
+  #'
+  ###
+  # Get all possible bingo cards for given card size and number of outcomes
+  ###
+  cards <- get_all_bingo_cards(noutcomes = noutcomes, cardsize = cardsize)
 
 
-
-ClassroomBingoAnalysis <- function(noutcomes, probs,  outcome_labels, card_size,
-                                   epsilon = 1e-8,
-                                   save_plots = F){
-  #' noutcomes:  is number of outcomes in random process under consideration
-  #' probs: is probability of each outcome (must have length noutcomes)
-  #' outcome_labels : names for each outcome (e.g. 2:6 are possible dice sums for original problem)
-  #'    these are used in labeling plots
-  #' card_size: is the number of spaces on a bingo card formed with those outcomes
-  #' epsilon: determines tolerance in detecting ties for maximum probability board
-  #' save_plots: TO DO
-  
-  #get all possible bingo cards for given card size and number of outcomes
-  cards = get_all_bingo_cards(noutcomes = noutcomes,
-                              card_size = card_size)
-
-
-  #Identify best board(s) for card_size rolls (the minimum possible # of rolls to win)
-  initial_probs = pwin(cards = cards, probs = probs, nrolls = card_size)
+  #Identify best board(s) for cardsize rolls (the minimum possible # of rolls to win)
+  initial_probs = pwin(cards = cards, probs = probs, nrolls = cardsize)
   initial_best_prob = max(initial_probs)
   
   
@@ -41,8 +49,8 @@ ClassroomBingoAnalysis <- function(noutcomes, probs,  outcome_labels, card_size,
            pch = 21, 
            bg = "lightblue",
            ylab = "Board Index", 
-           xlab = sprintf("Probability of winning in %s rolls", card_size),
-           main = sprintf("Probabilities of winning in %s rolls for all possible boards", card_size),
+           xlab = sprintf("Probability of winning in %s rolls", cardsize),
+           main = sprintf("Probabilities of winning in %s rolls for all possible boards", cardsize),
            pt.cex = 1.3, 
            cex.main = 1.5,
            cex.lab = 1.1,
@@ -50,8 +58,8 @@ ClassroomBingoAnalysis <- function(noutcomes, probs,  outcome_labels, card_size,
            frame.plot = F
   )
   
-  #get matrix of probabilities for minimum # possible to win to min + 30 rolls
-  nrollsvec <-  card_size:(card_size + 30)
+  # Get matrix of probabilities for minimum # possible to win to min + 30 rolls
+  nrollsvec <-  cardsize:(cardsize + 30)
   cum_mat = get_pwin_matrix(cards = cards,
                             probs = probs,
                             nrollsvec = nrollsvec)
@@ -94,6 +102,6 @@ ClassroomBingoAnalysis <- function(noutcomes, probs,  outcome_labels, card_size,
                               color_by_equiv_mat = T,
                               equiv_mat = equiv_mat)
   
-  return(cum_mat)
+  
 }
 
