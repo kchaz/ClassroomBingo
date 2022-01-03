@@ -1,6 +1,6 @@
 library(combinat)
-source('ClassroomBingoFunctions.R')
-source('ClassroomBingoAnalysis.R')
+source('src/ClassroomBingoFunctions.R')
+source('src/ClassroomBingoAnalysis.R')
 
 ###
 #' Run case as originally presented in Signficance magazine:
@@ -9,6 +9,7 @@ source('ClassroomBingoAnalysis.R')
 ###
 
 save_plots <- TRUE
+plotDir <- "plots"
 
 ###
 # setup parameters
@@ -23,11 +24,13 @@ outcome_labels <- as.character(2:6)
 ###
 probs <- c(1, 4, 10, 12, 9)/36
 out1 <- ClassroomBingoAnalysis(noutcomes = noutcomes,
-                                   probs = probs,
-                                   outcome_labels = outcome_labels,
-                                   card_size = card_size,
-                                   epsilon = 1e-8,
-                                   save_plots = save_plots)
+                               probs = probs,
+                               outcome_labels = outcome_labels,
+                               card_size = card_size,
+                               epsilon = 1e-8,
+                               save_plots = save_plots,
+                               caseLabel = 1,
+                               plotDir = plotDir)
 # See which is biggest at each roll
 apply(out1$cumprob_mat, 1, which.max)
 
@@ -39,11 +42,13 @@ apply(out1$cumprob_mat, 1, which.max)
 ###
 probs <- c(1, 4, 6, 20, 5)/36  
 out2 <- ClassroomBingoAnalysis(noutcomes = noutcomes,
-                       probs = probs,
-                       outcome_labels = outcome_labels,
-                       card_size = card_size,
-                       epsilon = 1e-8,
-                       save_plots = save_plots)
+                               probs = probs,
+                               outcome_labels = outcome_labels,
+                               card_size = card_size,
+                               epsilon = 1e-8,
+                               save_plots = save_plots,
+                               caseLabel = 2,
+                               plotDir = plotDir)
 # See which is biggest at each roll
 apply(out2$cumprob_mat, 1, which.max)
 
@@ -55,11 +60,13 @@ apply(out2$cumprob_mat, 1, which.max)
 ###
 probs <- rep(7.2, 5)/36   
 out3 <- ClassroomBingoAnalysis(noutcomes = noutcomes,
-                       probs = probs,
-                       outcome_labels = outcome_labels,
-                       card_size = card_size,
-                       epsilon = 1e-8,
-                       save_plots = save_plots)
+                               probs = probs,
+                               outcome_labels = outcome_labels,
+                               card_size = card_size,
+                               epsilon = 1e-8,
+                               save_plots = save_plots,
+                               caseLabel = 3,
+                               plotDir = plotDir)
 
 ###
 # CASE 4.
@@ -67,11 +74,13 @@ out3 <- ClassroomBingoAnalysis(noutcomes = noutcomes,
 ###
 probs <- c(1, 1, 1, 32, 1)/36
 out4 <- ClassroomBingoAnalysis(noutcomes = noutcomes,
-                       probs = probs,
-                       outcome_labels = outcome_labels,
-                       card_size = card_size,
-                       epsilon = 1e-8,
-                       save_plots = save_plots)
+                               probs = probs,
+                               outcome_labels = outcome_labels,
+                               card_size = card_size,
+                               epsilon = 1e-8,
+                               save_plots = save_plots,
+                               caseLabel = 4,
+                               plotDir = plotDir)
 
 ###
 # CASE 5.
@@ -79,11 +88,13 @@ out4 <- ClassroomBingoAnalysis(noutcomes = noutcomes,
 ###
 probs <-  c(0, 0, 0, 36, 0)/36
 out5 <- ClassroomBingoAnalysis(noutcomes = noutcomes,
-                       probs = probs,
-                       outcome_labels = outcome_labels,
-                       card_size = card_size,
-                       epsilon = 1e-8,
-                       save_plots = save_plots)
+                               probs = probs,
+                               outcome_labels = outcome_labels,
+                               card_size = card_size,
+                               epsilon = 1e-8,
+                               save_plots = save_plots,
+                               caseLabel = 5,
+                               plotDir = plotDir)
 
 ###
 # CASE 6.
@@ -93,9 +104,11 @@ out5 <- ClassroomBingoAnalysis(noutcomes = noutcomes,
 ###
 probs <- c(1, 2, 3, 10)/16
 out6 <- ClassroomBingoAnalysis(noutcomes = 4,
-                                  probs = probs,
-                                  outcome_labels = 1:4,
-                                  card_size = 6,
-                                  epsilon = 1e-8,
-                                  save_plots = save_plots)
+                               probs = probs,
+                               outcome_labels = 1:4,
+                               card_size = 6,
+                               epsilon = 1e-8,
+                               save_plots = save_plots,
+                               caseLabel = 6,
+                               plotDir = plotDir)
 
