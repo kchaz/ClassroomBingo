@@ -3,13 +3,14 @@ source('src/ClassroomBingoFunctions.R')
 source('src/ClassroomBingoAnalysis.R')
 
 ###
-#' Run case as originally presented in Signficance magazine:
+#' Run case as originally presented in Signficance magazine (Dec 2021):
 #' 5 possible outcomes to go on the bingo cards, cards of size 5.
 #' Vary the probabilities of the outcomes.
 ###
 
 save_plots <- TRUE
 plotDir <- "plots"
+if (save_plots && !dir.exists(plotDir)) dir.create(plotDir)
 
 ###
 # setup parameters
