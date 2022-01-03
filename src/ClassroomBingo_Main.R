@@ -1,4 +1,6 @@
-source('ClassroomBingo_RunSingleAnalysis.R')
+library(combinat)
+source('ClassroomBingoFunctions.R')
+source('ClassroomBingoAnalysis.R')
 
 ###
 #' Run case as originally presented in Signficance magazine:

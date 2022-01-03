@@ -1,4 +1,4 @@
-library(combinat)
+# library(combinat)
 
 get_all_bingo_cards <- function(noutcomes, cardsize) {
   #' DESCRIPTION
