@@ -16,7 +16,7 @@ if (save_plots && !dir.exists(plotDir)) dir.create(plotDir)
 # setup parameters
 ###
 noutcomes <- 5
-card_size <- 5
+cardsize <- 5
 outcome_labels <- as.character(2:6)
 
 ###
@@ -27,7 +27,7 @@ probs <- c(1, 4, 10, 12, 9)/36
 out1 <- ClassroomBingoAnalysis(noutcomes = noutcomes,
                                probs = probs,
                                outcome_labels = outcome_labels,
-                               card_size = card_size,
+                               cardsize = cardsize,
                                epsilon = 1e-8,
                                save_plots = save_plots,
                                caseLabel = 1,
@@ -45,7 +45,7 @@ probs <- c(1, 4, 6, 20, 5)/36
 out2 <- ClassroomBingoAnalysis(noutcomes = noutcomes,
                                probs = probs,
                                outcome_labels = outcome_labels,
-                               card_size = card_size,
+                               cardsize = cardsize,
                                epsilon = 1e-8,
                                save_plots = save_plots,
                                caseLabel = 2,
@@ -63,7 +63,7 @@ probs <- rep(7.2, 5)/36
 out3 <- ClassroomBingoAnalysis(noutcomes = noutcomes,
                                probs = probs,
                                outcome_labels = outcome_labels,
-                               card_size = card_size,
+                               cardsize = cardsize,
                                epsilon = 1e-8,
                                save_plots = save_plots,
                                caseLabel = 3,
@@ -77,7 +77,7 @@ probs <- c(1, 1, 1, 32, 1)/36
 out4 <- ClassroomBingoAnalysis(noutcomes = noutcomes,
                                probs = probs,
                                outcome_labels = outcome_labels,
-                               card_size = card_size,
+                               cardsize = cardsize,
                                epsilon = 1e-8,
                                save_plots = save_plots,
                                caseLabel = 4,
@@ -91,7 +91,7 @@ probs <-  c(0, 0, 0, 36, 0)/36
 out5 <- ClassroomBingoAnalysis(noutcomes = noutcomes,
                                probs = probs,
                                outcome_labels = outcome_labels,
-                               card_size = card_size,
+                               cardsize = cardsize,
                                epsilon = 1e-8,
                                save_plots = save_plots,
                                caseLabel = 5,
@@ -107,7 +107,7 @@ probs <- c(1, 2, 3, 10)/16
 out6 <- ClassroomBingoAnalysis(noutcomes = 4,
                                probs = probs,
                                outcome_labels = 1:4,
-                               card_size = 6,
+                               cardsize = 6,
                                epsilon = 1e-8,
                                save_plots = save_plots,
                                caseLabel = 6,
