@@ -15,7 +15,7 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
   #' one line for each possible card.
   #' 4. Line plot of cumulative win probability versus number of rolls, with
   #' one line for each possible card, and lines colored by card equivalence
-  #' class as defined by function get_equivalence_class_mat.
+  #' class as defined by function get_equivalence_classes.
   #'
   #' ARGUMENTS
   #' noutcomes:  numeric vector of length 1, giving number of possible
@@ -149,7 +149,7 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
   ###
   # Plot cumulative probability graph with equivalence coloring
   ###
-  equiv_mat <- get_equivalence_class_mat(cards)
+  equiv <- get_equivalence_classes(cards)
   if (save_plots) pdf(pnames[4], ...)
   plot_card_prob_trajectories(nrollsvec = nrollsvec,
                               mat = cum_mat,
@@ -158,8 +158,8 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
                               initial_best_cards = initial_best_cards,
                               legend_loc ="topleft",
                               outcome_labels = outcome_labels,
-                              color_by_equiv_mat = TRUE,
-                              equiv_mat = equiv_mat)
+                              color_by_equiv = TRUE,
+                              equiv = equiv)
   if (save_plots) dev.off()
 
   ###
