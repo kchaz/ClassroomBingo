@@ -191,6 +191,8 @@ get_pwin_matrix <- function(cards, probs, nrollsvec) {
   for (i in seq_len(nr)) {
      pwin_mat[i, ] <- pwin(cards = cards, probs = probs, nrolls = nrollsvec[i])
   }
+  dimnames(pwin_mat) <- list( paste("nrolls", nrollsvec, sep = "<="),
+    character(0) )
   return(pwin_mat)
 }
 
