@@ -28,19 +28,24 @@ get_all_bingo_cards <- function(noutcomes, cardsize) {
 }
 
 
-### TODO:
-### 1. REVISIT THIS FUNCTION. NEED TO DEFINE "C". AND, LAST 3 LINES PROBABLY
-### CAN BE REPLACED WITH SOMETHING SIMPLER, E.G. USING FUNCTION match??
-### 2. NEED TO FINISH DOCUMENTATION.
-get_equivalence_class_mat <- function(cards) {
+get_equivalence_classes <- function(cards) {
   #' DESCRIPTION
+  #'       Categorizes cards into equivalence classes formed by assuming
+  #' the possible outcomes for a single roll are exchangable. Under this
+  #' assumption, the equivalence classes are defined by the counts of
+  #' different outcomes. For example, cards 22333 and 55566 are in the same
+  #' class because they each contain exactly two copies of one outcome and
+  #' 3 copies of another.
   #' 
   #' ARGUMENTS
   #' cards:  numeric matrix representing possible bingo cards, such as returned
   #'   by function get_all_bingo_cards.
   #' 
   #' VALUE
-  #'  
+  #'       a numeric vector of integers giving equivalence class indices.
+  #' Element i gives the class index for the card represented by column i of
+  #' the cards argument. Includes a "levels" attribute, giving labels for the
+  #' equivalence classes.
   #'  
   ###
   # Sort each column to get single representation of cards with same groupings
@@ -64,17 +69,16 @@ get_equivalence_class_mat <- function(cards) {
   ###
   # Identify the unique strings (equivalence classes)
   ###
-
   classes <- unique(strings)
+
   ###
-  # Create C x ncols(cards) logical matrix with TRUEs encoding which class
-  # each card belongs to.
+  # Compute numeric vector with the value of element i giving the equivalence
+  # class index for the ith card.
+  # Object "equiv" is just like a factor, but we don't bother to make it one.
   ###
-  equiv_mat <- t(sapply(classes, FUN = function(c){c == strings},
-    USE.NAMES = TRUE))
-  # equiv_mat <- t(unlist(lapply(classes, FUN = function(c) {c == strings} ),
-  #   use.names = TRUE))
-  return(equiv_mat)
+  equiv <- match(strings, classes)
+  attr(equiv, "levels") <- classes
+  return(equiv)
 }
 
 
@@ -204,8 +208,8 @@ plot_card_prob_trajectories <- function(nrollsvec,
                                         initial_best_cards,
                                         outcome_labels,
                                         legend_loc = "top",
-                                        color_by_equiv_mat = FALSE,
-                                        equiv_mat = NULL) {
+                                        color_by_equiv = FALSE,
+                                        equiv = NULL) {
 #'
 #' Plot wrapper to avoid repeating many plotting commands.
 #' Plots trajectory of each card's probability of winning (or cumulative
@@ -220,8 +224,8 @@ plot_card_prob_trajectories <- function(nrollsvec,
 #' For example, if the outcomes are 2, 3, 4, 5, and 6, need to specify
 #' outcome_labels = 2:6; otherwise will start labeling them at 1.
 #' 
-#' If color_by_equiv_mat = F, plots lines in grey and highlights any best cards
-#' in color. If T, colors lines by multinomial equivalence class cards with
+#' If color_by_equiv = F, plots lines in grey and highlights any best cards
+#' in color. If T, colors lines by multinomial equivalence class: cards with
 #' same number of possible orderings of their entries (note that we really care
 #' about orderings of rolls but for cardsize rolls, this is equivalent to 
 #' number of orderings of numbers on card).
@@ -229,9 +233,9 @@ plot_card_prob_trajectories <- function(nrollsvec,
   ###
   # Argument checking
   ###
-  if (color_by_equiv_mat) {
-    if (is.null(equiv_mat)) {
-      stop("If color_by_equiv_mat = TRUE, equiv_mat must be given.")
+  if (color_by_equiv) {
+    if (is.null(equiv)) {
+      stop("If color_by_equiv = TRUE, equiv must be given.")
     }
   }
   ###
@@ -263,19 +267,19 @@ plot_card_prob_trajectories <- function(nrollsvec,
   )
   
   ###
-  # reference line
+  # Reference line
   ###
   abline(h = 1, lty = 2, col = "grey")
   
-  
-  if (color_by_equiv_mat) {
+  ###
+  # Add the actual lines, and a legend
+  ###
+  if (color_by_equiv) {
     # Color each card by equivalence class
-    labels <- rownames(equiv_mat)
+    labels <- attr(equiv, "levels")
     num_classes <- length(labels)
     colors <- rep(colors, length.out = num_classes)
-    # TODO: probably NOT necessary to apply this by column. Just do all at once?
-    per_card_colors <- apply(equiv_mat, MARGIN = 2,
-      FUN =  function(c) { colors[c] })
+    per_card_colors <- colors[equiv]
     # Plot cards
     for (i in seq_len(ncol(mat))) {
       lines(nrollsvec, mat[, i], col = per_card_colors[i], lty = 1, lwd = 1)

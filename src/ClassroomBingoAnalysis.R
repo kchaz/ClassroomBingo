@@ -15,7 +15,7 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
   #' one line for each possible card.
   #' 4. Line plot of cumulative win probability versus number of rolls, with
   #' one line for each possible card, and lines colored by card equivalence
-  #' class as defined by function get_equivalence_class_mat.
+  #' class as defined by function get_equivalence_classes.
   #'
   #' ARGUMENTS
   #' noutcomes:  numeric vector of length 1, giving number of possible
@@ -127,15 +127,15 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
   ###
   # Plot probability graph
   ###
-  if (TRUE) {
-    cum_to_prob <- function(v) {
-      n <- length(v)
-      return(c(v[1], v[2:n] - v[seq_len(n-1)]))
-    }
-    prob_mat <- apply(cum_mat, MARGIN = 2, cum_to_prob)
+  cum_to_prob <- function(v) {
+    n <- length(v)
+    return(c(v[1], v[2:n] - v[seq_len(n-1)]))
   }
-  # TODO: TEST THIS NEXT LINE:
-  # prob_mat <- rbind(cum_mat[1, ], diff(cum_mat[-1, ]))
+  prob_mat <- apply(cum_mat, MARGIN = 2, cum_to_prob)
+  # THIS ALSO WOULD WORK, BUT IS NO FASTER:
+  # prob_mat <- rbind(cum_mat[1, ], diff(cum_mat))
+  # dimnames(prob_mat) <- list( paste("nrolls", nrollsvec, sep = "="),
+  #   character(0) )
   if (save_plots) pdf(pnames[3], ...)
   plot_card_prob_trajectories(nrollsvec = nrollsvec,
                               mat = prob_mat,
@@ -149,7 +149,7 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
   ###
   # Plot cumulative probability graph with equivalence coloring
   ###
-  equiv_mat <- get_equivalence_class_mat(cards)
+  equiv <- get_equivalence_classes(cards)
   if (save_plots) pdf(pnames[4], ...)
   plot_card_prob_trajectories(nrollsvec = nrollsvec,
                               mat = cum_mat,
@@ -158,8 +158,8 @@ ClassroomBingoAnalysis <- function(noutcomes, probs, outcome_labels, cardsize,
                               initial_best_cards = initial_best_cards,
                               legend_loc ="topleft",
                               outcome_labels = outcome_labels,
-                              color_by_equiv_mat = TRUE,
-                              equiv_mat = equiv_mat)
+                              color_by_equiv = TRUE,
+                              equiv = equiv)
   if (save_plots) dev.off()
 
   ###
